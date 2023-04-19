@@ -1,0 +1,21 @@
+{
+  "name": "robustexpress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^6.1.5",
+    "katy-query": "^4.7.1",
+    "pg": "^8.10.0",
+    "sqlstring": "^2.3.3"
+  }
+}
