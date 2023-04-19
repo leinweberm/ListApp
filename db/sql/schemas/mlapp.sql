@@ -1,0 +1,2 @@
+CREATE SCHEMA IF NOT EXISTS mlapp;
+ALTER SCHEMA mlapp OWNER TO pgadmin;

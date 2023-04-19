@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+    db:
+        image: postgres:15-alpine
+        restart: always
+        env_file:
+            - .env
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_HOST: ${POSTGRES_HOST}
+            POSTGRES_PORT: ${POSTGRES_PORT}
+        volumes:
+            - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+        ports:
+            - '5432:5432'
+        networks:
+            app-net:
+        healthcheck:
+            test: ['CMD', 'pg_isready', '-U', 'pgadmin']
+
+    server:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        ports:
+            - '3000:3000'
+        networks:
+            - app-net
+        volumes:
+            - ./server:/app
+        env_file:
+            - .env
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_HOST: ${POSTGRES_HOST}
+            POSTGRES_PORT: ${POSTGRES_PORT}
+        depends_on:
+            db:
+                condition: service_healthy
+
+    client:
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        ports:
+            - '8080:8080'
+        volumes:
+            - ./client:/client
+        networks:
+            - app-net
+
+networks:
+    app-net:
+        driver: bridge
