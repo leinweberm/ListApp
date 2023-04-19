@@ -1,10 +1,12 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+
 import { usePreferenceStore } from '../../stores/preferences';
 import { setTheme } from '../../utils/theme';
 import { User } from './types/user';
 import { InputOption } from '../../types/inputOption';
+import { setUserPreference } from '../../utils/setUserPreferences';
 
 export default defineComponent({
 	setup() {
@@ -22,29 +24,9 @@ export default defineComponent({
 		];
 
 		onMounted(() => {
-			console.log('route params', route.params);
-			console.log('currentUser', preferenceStore.currentUser);
-
 			authedUser.value = preferenceStore.currentUser;
-			if (!authedUser.value) {
-				const selectedLanguage:string|null = localStorage.getItem('language');
-				if (selectedLanguage) {
-					preferenceStore.setUserLang(selectedLanguage);
-				}
-				const selectedTheme:string|null = localStorage.getItem('theme');
-				if (selectedTheme) {
-					preferenceStore.setUserTheme(selectedTheme);
-				}
-			} else if (authedUser.value) {
-				if (authedUser.value.lang) {
-					preferenceStore.setUserLang(authedUser.value.lang);
-				}
-				if (authedUser.value.theme) {
-					preferenceStore.setUserTheme(authedUser.value.theme);
-				}
-			}
-			console.log('current theme', preferenceStore.currentTheme);
-			console.log('current lang', preferenceStore.currentLang);
+			setUserPreference();
+			nextTick();
 		});
 
 		const handleSwitchSettings = (type:string) => {
@@ -115,14 +97,4 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.pageInnerBody {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	width: 100%;
-	max-width: 800px;
-	border: 1px solid red;
-	margin: auto;
-	align-items: center;
-}
 </style>

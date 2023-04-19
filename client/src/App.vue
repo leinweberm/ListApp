@@ -1,20 +1,35 @@
 <script lang="ts">
-import { reactive } from 'vue';
-import { notification } from './types/notification';
+import { reactive, defineComponent, onMounted, ref, nextTick } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-export default {
+import { User } from './types/user';
+import { notification } from './types/notification';
+import { usePreferenceStore } from './stores/preferences';
+import { setUserPreference } from './utils/setUserPreferences';
+
+export default defineComponent({
 	setup() {
+		const { t } = useI18n({ useScope: 'global' });
+		const authedUser = ref<User|null>(null);
+		const preferenceStore = usePreferenceStore();
 		const notification:notification = reactive({
 			type: 'info',
 			title: '',
 			message: '',
 		});
+		
+		onMounted(() => {
+			authedUser.value = preferenceStore.currentUser;
+			setUserPreference();
+			nextTick();
+		});
 
 		return {
 			notification,
+			t,
 		};
 	},
-};
+});
 </script>
 
 <template>

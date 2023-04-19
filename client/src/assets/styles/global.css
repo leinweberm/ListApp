@@ -83,10 +83,25 @@ label {
 	font-size: 14px;
 }
 
+.fa-solid {
+	color: var(--primary);
+}
+.fa-reverse {
+	color: var(--disabled);
+}
+
 .pageBody {
 	display: flex;
 	height: calc(100dvh - var(--menuSize));
 	padding: 20px;
 }
-
+.pageInnerBody {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+	max-width: 800px;
+	margin: auto;
+	align-items: center;
+}
 
