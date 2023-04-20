@@ -40,9 +40,10 @@ const routes: RouteRecordRaw[] = [
 		component: () => import('./pages/list/List.vue'),
 	},
 	{
-		path: '/editor/:id',
+		path: '/editor/:todo_uid',
 		name: 'Editor',
 		component: () => import('./pages/editor/Editor.vue'),
+		props: true,
 	},
 	{
 		path: '/user/:id',

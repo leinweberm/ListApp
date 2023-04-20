@@ -5,7 +5,8 @@ export type todo = {
 	user_uid?:string;
 	created?: string;
 	updated?: string;
-	delted?: string;
+	deleted?: string;
+	icon?: string;
 };
 
 export type todos = todo[];

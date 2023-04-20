@@ -15,9 +15,27 @@ export default {
 <template>
 	<div class="menuBody">
 		<div class="menuInnerBody">
-			<RouterLink to="/" class="menuItem"></RouterLink>
-			<RouterLink to="/editor/+" class="menuItem"></RouterLink>
-			<RouterLink to="/user/+" class="menuItem"></RouterLink>
+			<RouterLink to="/" class="menuItem">
+				<icon
+					icon="fa-solid fa-list"
+					class="fa-reverse"
+					style="height: 20px;"
+				/>
+			</RouterLink>
+			<RouterLink to="/editor/+" class="menuItem">
+				<icon
+					icon="fa-solid fa-circle-plus"
+					class="fa-reverse"
+					style="height: 40px;"
+				/>
+			</RouterLink>
+			<RouterLink to="/user/+" class="menuItem">
+				<icon
+					icon="fa-solid fa-circle-user"
+					class="fa-reverse"
+					style="height: 40px;"
+				/>
+			</RouterLink>
 		</div>
 	</div>
 </template>
@@ -42,6 +60,9 @@ export default {
 	max-width: 800px;
 }
 .menuItem {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
