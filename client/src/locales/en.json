@@ -1,3 +1,9 @@
 {
-	"add": "Add ToDo"
+	"add": "Add ToDo",
+	"delete": "Delete",
+	"description": "Description",
+	"done": "Done",
+	"icon": "Icon",
+	"save": "Save",
+	"title": "Title"
 }

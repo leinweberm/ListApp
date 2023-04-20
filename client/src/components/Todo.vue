@@ -42,13 +42,7 @@ export default defineComponent({
 		};
 
 		const openSelected = () => {
-			const params:todo = {
-				todo_uid: props.todoUid,
-				name: props.todoTitle,
-				description: props.todoDescription,
-				icon: props.todoIcon,
-			};
-			router.push({ name: 'Editor', params});
+			router.push(`/editor/${props.todoUid}`);
 		};
 
 		const deleteSelected = () => {
@@ -66,15 +60,15 @@ export default defineComponent({
 </script>
 
 <template>
-	<div class="todoBody" @click.stop="openSelected">
-		<div class="todoIcon">
+	<div class="todoBody">
+		<div class="todoIcon" @click.stop="openSelected">
 			<icon
 				:icon="`fa-solid fa-2xl ${props.todoIcon}`"
 				class="fa-solid"
 				style="height: 25px;"
 			/>
 		</div>
-		<div class="todoText">
+		<div class="todoText" @click.stop="openSelected">
 			<b>{{ props.todoTitle }}</b>
 			<p>{{ description }}</p>
 		</div>
@@ -89,6 +83,7 @@ export default defineComponent({
 				:icon="`fa-solid fa-2xl fa-circle-xmark`"
 				class="fa-reverse"
 				style="height: 28px;"
+				@click.stop="deleteSelected"
 			/>
 		</div>
 	</div>

@@ -11,6 +11,8 @@ import {
 	faCalendar,
 	faList,
 	faFile,
+	faCar,
+	faCartShopping,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import mitt from 'mitt';
@@ -31,6 +33,8 @@ library.add(
 	faCalendar,
 	faList,
 	faFile,
+	faCar,
+	faCartShopping,
 );
 
 const routes: RouteRecordRaw[] = [

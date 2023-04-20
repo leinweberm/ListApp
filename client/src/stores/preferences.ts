@@ -1,6 +1,7 @@
 import { computed } from 'vue';
 import { defineStore } from 'pinia';
-import { User } from '../pages/user/types/user';
+import { User } from '../types/user';
+import { todo, todos } from '../types/todo';
 
 type themeOption = 'light' | 'dark';
 type langOption = 'cs' | 'en';
@@ -8,51 +9,85 @@ type storageOption = 'localStorage' | 'db';
 type currentUser = User | null;
 
 export const usePreferenceStore = defineStore('preferences', () => {
-	// USER TYPE
+	// ===== USER TYPE =====
 	let user:currentUser = null;
+
+	const currentStorageType = computed(() => storageType);
+
 	const login = (logged_user:User) => {
 		user = logged_user;
 		storageType = 'db';
 	};
+
 	const currentUser = computed(() => user);
 
-	// STORAGE TYPE
+	// ===== STORAGE TYPE =====
 	let storageType:storageOption = 'localStorage';
-	const currentStorageType = computed(() => storageType);
 	
-	// USER COLOUR THEME
+	// ===== USER COLOUR THEME =====
 	let theme:themeOption = 'light';
-	const switchTheme = () => {
-		theme = (theme === 'light') ? 'dark' : 'light';
-	};
-	const setUserTheme = (newTheme:string) => {
-		if (newTheme === 'dark' || newTheme === 'light') {
-			theme = newTheme;
-		}
-	};
+
 	const currentTheme = computed(() => theme);
+
+	const switchTheme = (newTheme:themeOption) => {
+		theme = newTheme;
+	};
+
+	const getTheme = () => {
+		return theme;
+	};
 	
-	// USER SELECTED LANGUAGE
+	// ===== USER SELECTED LANGUAGE =====
 	let lang:langOption = 'en';
-	const switchLang = () => {
-		lang = (lang === 'en') ? 'cs' : 'en';
-	};
-	const setUserLang = (newLang:string) => {
-		if (newLang === 'cs' || newLang === 'en') {
-			lang = newLang;
-		}
-	};
+
 	const currentLang = computed(() => lang);
+
+	const switchLang = (newLang:langOption) => {
+		lang = newLang;
+	};
+
+	const getLang = () => {
+		return lang;
+	};
+
+	// ===== TODOS =====
+	let todos:todos = [];
+
+	const currentTodos = computed(() => todos);
+
+	const updateTodo = (updatedTodo:todo):void => {
+		let selectedTodo = todos.find((todo) => (
+			todo.todo_uid === updatedTodo.todo_uid
+		));
+		selectedTodo = updatedTodo;
+	};
+
+	const insertTodo = (newTodo:todo) => {
+		todos.push(newTodo);
+	};
+
+	const setTodos = (setTodos:todos) => {
+		todos = setTodos;
+	};
+
+	const getTodo = (uid:string) => {
+		return todos.find((todo) => (todo.todo_uid === uid));
+	};
 
 	return {
 		login,
 		currentUser,
 		currentStorageType,
 		switchTheme,
-		setUserTheme,
+		getTheme,
 		currentTheme,
 		switchLang,
-		setUserLang,
-		currentLang
+		getLang,
+		currentLang,
+		currentTodos,
+		setTodos,
+		updateTodo,
+		insertTodo,
+		getTodo,
 	};
 });

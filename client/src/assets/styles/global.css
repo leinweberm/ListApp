@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;800;900&display=swap');
 
-
+/* GENERAL SETTING */
 :root {
 	font-family: 'Golos Text', sans-serif;
 
@@ -45,6 +45,14 @@ body {
 	background-color: var(--secondary-background);
 }
 
+/* SIZES */
+.size-5 { width: 20%; }
+.size-4 { width: 25%; }
+.size-3 { width: 33%; }
+.size-2 { width: 50%; }
+.size-1 { width: 100%; }
+
+/* BUTTONS */
 button {
 	font-size: 1rem;
 	padding: 8px 16px;
@@ -55,6 +63,7 @@ button {
 	color: var(--background);
 	background-color: var(--primary);
 	cursor: pointer;
+	min-width: 100px;
 }
 button:hover {
 	background-color: var(--active);
@@ -64,6 +73,11 @@ button:disabled:hover {
 	background-color: var(--disabled);
 	color: var(--text-color);
 	cursor: default;
+}
+button.main {
+	width: 100%;
+	max-width: 250px;
+	margin-top: 30px;
 }
 button.inverse,
 button.inverse:hover {
@@ -78,31 +92,53 @@ button.inverse:disabled:hover {
 	color: var(--disabled);
 }
 
+/* INPUTS */
 label {
 	color: var(--text-color);
 	font-size: 14px;
 }
-
 input {
-	height: 30px;
+	min-height: 30px;
 	width: 100%;
-	max-width: 300px;
 	border-radius: 4px;
-	border: 1px solid var(--border)
+	border: 1px solid var(--border);
+	background-color: var(--background);
+	color: var(--text-color);
+	padding: 10px;
+	font-size: 0.95rem;
 }
-input:active, input:hover, input:focus {
-	border: 1px solid var(--active);
+textarea {
+	width: 100%;
+	border-radius: 4px;
+	border: 1px solid var(--border);
+	resize: none;
+	padding: 10px;
+	background-color: var(--background);
+	color: var(--text-color);
+	font-size: 0.95rem;
+}
+@media (min-width: 768px) {
+	textarea:hover::-webkit-scrollbar-thumb {
+		background-color: var(--disabled);
+	}
+}
+input:active, input:hover, input:focus, input:focus-visible,
+textarea:active, textarea:hover, textarea:focus, textarea:focus-visible {
+	border: 1px solid var(--active) !important;
+	outline: none;
 }
 input:invalid {
 	border: 1px solid var(--error);
 }
 
+/* ICONS */
 .fa-solid {
 	color: var(--primary);
 }
 .fa-reverse {
 	color: var(--disabled);
 }
+
 /* SCROLLBAR */
 ::-webkit-scrollbar {
 	width: 10px;
@@ -112,11 +148,13 @@ input:invalid {
 }
 ::-webkit-scrollbar-thumb {
 	background: var(---secondary-background);
+	border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
 	background: var(--disabled);
 }
 
+/* BASIC ELEMENTS */
 .pageBody {
 	display: flex;
 	height: calc(100dvh - var(--menuSize));
@@ -136,6 +174,14 @@ input:invalid {
 @media (max-width: 300px) {
 	.pageBody {
 		padding: 10px 0;
-	}	
+	}
+}
+@media (max-width: 768px) {
+	::-webkit-scrollbar-thumb {
+		background-color: var(--disabled);
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background-color: var(--disabled);
+	}
 }
 

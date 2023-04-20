@@ -39,7 +39,6 @@ export default defineComponent({
 		const handleSwitch = () => {
 			const selected= checked.value ? 1 : 0;
 			selectedIndex.value = selected;
-			console.log('selected:', attr[selected].value);
 			context.emit('inputSwitchChanged', attr[selected].value);
 		};
 

@@ -15,19 +15,13 @@ export default defineComponent({
 	setup() {
 		const router = useRouter();
 		const preferenceStore = usePreferenceStore();
-		const authedUser = ref(preferenceStore.currentUser);
 		let todoList = ref<todos>([]);
 
 		onMounted(() => {
-			authedUser.value = preferenceStore.currentUser;
-
-			if (authedUser.value) {
+			if (preferenceStore.currentUser) {
 				console.log('bude nacteno z DB');
 			} else {
-				const localItems = localStorage.getItem('list-app-todos');
-				if (localItems) {
-					todoList.value = JSON.parse(localItems);
-				}
+				todoList.value = preferenceStore.currentTodos;
 				if (!todoList || !todoList.value.length) {
 					todoList.value.push({
 						todo_uid: 'a1b1c1d1e1',
@@ -36,32 +30,30 @@ export default defineComponent({
 						icon: 'fa-file',
 					})
 				}
+				preferenceStore.setTodos(todoList.value);
 			}
 			nextTick();
 		});
 
 		onActivated(() => {
-			authedUser.value = preferenceStore.currentUser;
+			todoList.value = preferenceStore.currentTodos;
+			console.log('currentStore todos:', preferenceStore.currentTodos);
+			nextTick();
 		});
 
 		const deleteTodo = (todoUid:string) => {
+			console.log('todoUid', todoUid);
 			todoList.value = todoList.value.filter((todo) => (
 				todo.todo_uid !== todoUid
 			));
-
-			if (authedUser.value) {
-				console.log('bude ulozeno do DB');
-			} else {
-				saveTodoList(todoList.value);
+			if (preferenceStore.currentUser) {
 			}
+			preferenceStore.setTodos(todoList.value);
+			nextTick();
 		};
 
 		const createTodo = () => {
 			router.push('/editor/+');
-		};
-
-		const saveTodoList = (todos:todos) => {
-			localStorage.setItem('list-app-todos', JSON.stringify(todos));
 		};
 
 		return {
@@ -84,9 +76,13 @@ export default defineComponent({
 					:todoIcon="todo.icon"
 					:todoTitle="todo.name"
 					:todoDescription="todo.description"
+					@delete-selected-todo="deleteTodo"
 				/>
 			</div>
-			<button class="addToDo" @click.stop="createTodo">
+			<button
+				class="main"
+				@click.stop="createTodo"
+			>
 				{{ $t('add') }}
 			</button>
 		</div>
@@ -102,23 +98,15 @@ export default defineComponent({
 	overflow-y: scroll;
 	padding-left: 10px;
 }
-.todos:hover::-webkit-scrollbar-thumb {
-	background-color: var(--disabled);
-}
 .todo {
 	display: flex;
 	height: 30px;
 	width: 100%;
 	background-color: var(--background);
 }
-.addToDo {
-	height: 40px;
-	display: flex;
-	width: 100%;
-	max-width: 250px;
-	text-align: center;
-	align-items: center;
-	justify-content: center;
-	margin: 30px 0 0 0;
+@media (min-width: 768px) {
+	.todos:hover::-webkit-scrollbar-thumb {
+		background-color: var(--disabled);
+	}
 }
 </style>

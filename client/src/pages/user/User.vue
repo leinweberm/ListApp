@@ -1,19 +1,13 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref, nextTick } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { defineComponent, onMounted, onActivated, ref } from 'vue';
 
 import { usePreferenceStore } from '../../stores/preferences';
 import { setTheme } from '../../utils/theme';
-import { User } from './types/user';
 import { InputOption } from '../../types/inputOption';
-import { setUserPreference } from '../../utils/setUserPreferences';
 
 export default defineComponent({
 	setup() {
-		const route = useRoute();
-		const router = useRouter();
 		const preferenceStore = usePreferenceStore();
-		const authedUser = ref<User|null>(null);
 		const langOptions:InputOption = [
 			{ value: 'en', label: 'English' },
 			{ value: 'cs', label: 'Czech' },
@@ -22,55 +16,43 @@ export default defineComponent({
 			{ value: 'light', label: 'Light' },
 			{ value: 'dark', label: 'Dark' },
 		];
+		const selectedLang = ref<string>();
+		const selectedTheme = ref<string>();
+		type themeOption = 'light' | 'dark';
+		type langOption = 'cs' | 'en';
 
 		onMounted(() => {
-			authedUser.value = preferenceStore.currentUser;
-			setUserPreference();
-			nextTick();
+			fetch();
 		});
 
-		const handleSwitchSettings = (type:string) => {
-			console.log('type', type);
-			switch(type) {
-				case 'theme':
-					preferenceStore.switchTheme();
-					setTheme(preferenceStore.currentTheme);
-					console.log('current theme', preferenceStore.currentTheme);
-					break;
-				case 'lang':
-					preferenceStore.switchLang();
-					console.log('current lang', preferenceStore.currentLang);
-					break;
-				default:
-					console.warn('Invalid action type');
-					break;
-			};
+		onActivated(() => {
+			fetch();
+		})
+
+		const fetch = () => {
+			selectedLang.value = preferenceStore.currentLang;
+			selectedTheme.value = preferenceStore.currentTheme;
 		};
 
-		const prepareSelectedOption = (type:string):number => {
-			switch(type) {
-				case 'theme':
-					const selectedTheme:number = themeOptions.findIndex(
-						(item) => (item.value === preferenceStore.currentTheme)
-					);
-					return selectedTheme;
-				case 'lang':
-					const selectedLang:number = langOptions.findIndex(
-						(item) => (item.value === preferenceStore.currentLang)
-					);
-					return selectedLang;
-				default:
-					return 0;
-			}
+		const handleSwitchTheme = (theme:themeOption) => {
+			// console.log('theme', theme);
+			preferenceStore.switchTheme(theme);
+			// console.log('current theme:', preferenceStore.getTheme);
+			setTheme(theme);
+		};
+
+		const handleSwitchLanguage = (lang:langOption) => {
+			// console.log('lang', lang);
+			preferenceStore.switchLang(lang);
+			// console.log('current lang:', preferenceStore.getLang);
 		};
 
 		return {
-			authedUser,
 			preferenceStore,
 			langOptions,
 			themeOptions,
-			handleSwitchSettings,
-			prepareSelectedOption,
+			handleSwitchTheme,
+			handleSwitchLanguage,
 		};
 	},
 });
@@ -83,13 +65,13 @@ export default defineComponent({
 			<input-switch
 				id="user-selected-language"
 				:attribute="langOptions"
-				@input-switch-changed="handleSwitchSettings('lang')"
+				@input-switch-changed="handleSwitchLanguage"
 			/>
 
 			<input-switch
 				id="user-selected-theme"
 				:attribute="themeOptions"
-				@input-switch-changed="handleSwitchSettings('theme')"
+				@input-switch-changed="handleSwitchTheme"
 			/>
 
 		</div>

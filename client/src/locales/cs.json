@@ -1,3 +1,9 @@
 {
-	"add": "Pridat ukol"
+	"add": "Pridat ukol",
+	"delete": "Odstranit",
+	"description": "Popis",
+	"done": "Splneno",
+	"icon": "Ikona",
+	"save": "Ulozit",
+	"title": "Nadpis"
 }

@@ -3,6 +3,7 @@
 import { usePreferenceStore } from '../stores/preferences';
 import { setTheme } from './theme';
 import { User } from '../types/user';
+import { todos } from '../types/todo';
 
 export const setUserPreference = ():void => {
 	const preferenceStore = usePreferenceStore();
@@ -10,24 +11,17 @@ export const setUserPreference = ():void => {
 
 	if (!authedUser) {
 		const selectedLanguage:string|null = localStorage.getItem('language');
-		if (selectedLanguage) {
-			preferenceStore.setUserLang(selectedLanguage);
-		}
 		const selectedTheme:string|null = localStorage.getItem('theme');
-		if (selectedTheme) {
-			preferenceStore.setUserTheme(selectedTheme);
-		}
-
 		setTheme(selectedTheme || 'light');
 
-	} else if (authedUser) {
-		if (authedUser.lang) {
-			preferenceStore.setUserLang(authedUser.lang);
-		}
-		if (authedUser.theme) {
-			preferenceStore.setUserTheme(authedUser.theme);
+		const savedTodos:todos = JSON.parse(
+			JSON.stringify(localStorage.getItem('list-app-todos'))
+		);
+		if (savedTodos && savedTodos.length) {
+			preferenceStore.setTodos(savedTodos);
 		}
 
+	} else if (authedUser) {
 		setTheme(authedUser.theme || 'light');
 	}
 };
